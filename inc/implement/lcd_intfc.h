@@ -63,9 +63,23 @@ typedef int lcd_intfc_status_t;
  * @brief One-time bus interface initialisation.
  *
  * Call once at startup before any peripheral driver (aip31068l, pca9633dp2).
- * Leave the body empty if the platform SDK already initialises the bus.
  */
 void lcd_intfc_init(void);
+
+/**
+ * @brief Re-initialise the bus after a low-power sleep cycle.
+ *
+ * Call before any lcd_intfc_write() following lcd_intfc_teardown().
+ */
+void lcd_intfc_bringup(void);
+
+/**
+ * @brief De-initialise the bus before entering a low-power sleep cycle.
+ *
+ * Resets the I2C peripheral and disables its clock. Pair with
+ * lcd_intfc_bringup() on wake.
+ */
+void lcd_intfc_teardown(void);
 
 /**
  * @brief Write @p len bytes to the device at 7-bit address @p addr.

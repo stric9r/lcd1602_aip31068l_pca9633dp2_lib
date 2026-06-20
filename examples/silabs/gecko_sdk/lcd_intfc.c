@@ -38,11 +38,23 @@
 #include "lcd_intfc.h"
 #include "sl_i2cspm.h"
 #include "em_i2c.h"
+#include "em_cmu.h"
 #include "sl_i2cspm_instances.h"
 
 void lcd_intfc_init(void)
 {
-    /* sl_i2cspm_lcd1602 is initialised by the SDK before app_init(). */
+    sl_i2cspm_init_instances();
+}
+
+void lcd_intfc_bringup(void)
+{
+    sl_i2cspm_init_instances();
+}
+
+void lcd_intfc_teardown(void)
+{
+    I2C_Reset(sl_i2cspm_lcd1602);
+    CMU_ClockEnable(cmuClock_I2C0, false);
 }
 
 lcd_intfc_status_t lcd_intfc_write(uint16_t addr, const uint8_t *data, size_t len)
